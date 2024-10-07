@@ -28,7 +28,7 @@ impl<'a, SymmKeyRef: SymmetricKeyRef, AsymmKeyRef: AsymmetricKeyRef>
 
     fn get_mut(&mut self) -> Result<&mut Keys<SymmKeyRef, AsymmKeyRef>> {
         // TODO: This should be a custom error
-        Err(crate::CryptoError::MissingKey2(
+        Err(crate::CryptoError::MissingKey(
             "Cannot modify in read-only mode".to_string(),
         ))
     }
@@ -238,7 +238,7 @@ impl<
         } else {
             self.global.get().symmetric_keys.get(key_ref)
         }
-        .ok_or_else(|| crate::CryptoError::MissingKey2(format!("{key_ref:?}")))
+        .ok_or_else(|| crate::CryptoError::MissingKey(format!("{key_ref:?}")))
     }
 
     fn get_asymmetric_key(&self, key_ref: AsymmKeyRef) -> Result<&AsymmetricCryptoKey> {
@@ -247,7 +247,7 @@ impl<
         } else {
             self.global.get().asymmetric_keys.get(key_ref)
         }
-        .ok_or_else(|| crate::CryptoError::MissingKey2(format!("{key_ref:?}")))
+        .ok_or_else(|| crate::CryptoError::MissingKey(format!("{key_ref:?}")))
     }
 
     #[deprecated(note = "This function should ideally never be used outside this crate")]
